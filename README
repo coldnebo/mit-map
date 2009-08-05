@@ -1,0 +1,8 @@
+This is a simple scraper to dot file generator that parses MIT's Mathematics (Course 18) pages
+and generates a directed graph.  It could be used for other courses.
+
+See the png or svg for examples of the final dot rendering, or look at the dot file for generated dependencies.
+
+Motivation: If you hear about an interesting subject, it's helpful to know the general prerequisites for it. 
+This is top-down course planning instead of bottom up.  It's always helpful to ask your advisor, but this 
+visualization can help you get an idea of the right questions to ask beforehand.  It gives you the big picture.
