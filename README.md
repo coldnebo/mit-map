@@ -1,26 +1,29 @@
-=About
+#About
 
 This is a simple scraper to dot file generator that parses MIT's Mathematics (Course 18) pages
-and generates a directed graph.  It could be used for other courses.
+and generates a directed graph in `math.dot` and `math.png`.  It could be used for other courses.
 
 See math-cropped.png for an excerpt from the example below.
 
 Usage:
 
-  $ ruby course.rb
-  [#<MITCourse:0x7fa589618cb8
-    @name="Complex Variables with Applications",
-    @number="18.04",
-    @prerequisites=
-     ["18.02", "18.02A", "18.022", "18.023", "18.024", "18.03", "18.034"]>]
-  $ dot -Tpng math.dot -o math.png
+```bash
+$ bundle install
+$ ruby course.rb 
+[#<MITCourse:0x00000002c3fe68
+  @name="Complex Variables with Applications",
+  @number="18.04",
+  @prerequisites=
+   ["18.02", "18.02A", "18.022", "18.023", "18.024", "18.03", "18.034"]>]
+Warning: dot does not support the aspect attribute for disconnected graphs or graphs with clusters
+```
 
 Motivation: If you hear about an interesting subject, it's helpful to know the general prerequisites for it. 
 This is top-down course planning instead of bottom up.  It's always helpful to ask your advisor, but this 
 visualization can help you get an idea of the right questions to ask beforehand.  It gives you the big picture.
 
 
-=License
+#License
 
 This script released under the MIT license (of course):
 

@@ -1,35 +1,35 @@
 #!/usr/env/ruby
 
-require 'rubygems'
-require 'hpricot'
+require 'nokogiri'
 require 'open-uri'
-require 'pp'
+require 'pry'
+
 
 class MITCourse
   
   attr_accessor :name, :number, :prerequisites
 
   def self.get_courses(url)
-    doc = Hpricot(open(url))
+    doc = Nokogiri::HTML(open(url))
     # this is because MIT's registrar doesn't believe in structured page HTML, so we have to 
     # serially parse the elements between h3's instead of using xpath to access them... thanks MIT.
     
     # ok, find the toplevel td containing all these h3's...
-    container = doc.search("//h3/..")
-    
+    container = doc.xpath('//h3[1]/..')
+
     courses = []
     current_course = nil
     current_prereq = nil
     
     # now iterate over the decendants...
-    container.search("/*") do |element|
+    container.children.each do |element|
       case element.name
         when /h3/
           # push the previous course and make a new object...
           courses.push(current_course) unless current_course.nil?
           current_course = MITCourse.new()
           # grab the course number and name from the h3...
-          element.inner_text.rstrip =~ /^([\w\.]+) (.*)/
+          element.inner_text.rstrip =~ /^([\d\.]+)\w* (.*)/
           current_course.name = $2
           current_course.number = $1
         when /br/
@@ -59,6 +59,7 @@ class MITCourse
           end
           # if we have started an active prereq block, then append everything else to the block.
           unless current_course.nil? || current_prereq.nil?
+            text.gsub!(/Coreq:/,'')
             current_prereq.push(text)
           end
       end
@@ -72,13 +73,13 @@ class MITCourse
     # some of the prereqs have commas within them... normalize these to separate entries.
     text = prereqs.join(",")
     items = text.split(",").each {|i| i.strip!}
-    items = items.select {|i| i =~ /\d+\.\w+/}
+    items = items.select {|i| i =~ /\d+\.\d+/}
   end
   
 end
 
 def id(course)
-  "c#{course.gsub(/\./,'')}"
+  "c#{course.gsub(/\./,'_')}"
 end
 
 def color_map(num)
@@ -117,3 +118,7 @@ pageb = MITCourse.get_courses('http://student.mit.edu/catalog/m18b.html')
 all_math = pagea.concat(pageb)
 pp pagea.select{|c| c.number =~ /18\.04/}
 generate_dot(all_math)
+
+%x{dot -Tpng math.dot -o math.png}
+
+#binding.pry
