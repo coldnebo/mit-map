@@ -3,7 +3,9 @@
 This is a simple scraper to dot file generator that parses MIT's Mathematics (Course 18) pages
 and generates a directed graph in `math.dot` and `math.png`.  It could be used for other courses.
 
-See math-cropped.png for an excerpt from the example below.
+Example: 
+
+[<img src='https://raw.github.com/coldnebo/mit-map/master/math.png' width='75%'/>](https://raw.github.com/coldnebo/mit-map/master/math.png)
 
 Usage:
 
